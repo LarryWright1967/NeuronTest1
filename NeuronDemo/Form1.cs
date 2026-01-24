@@ -31,6 +31,39 @@ namespace NeuronDemo
 
 namespace NeuronDemo
 {
+    public class NeuronLayer
+    {
+        public List<SimpleNeuron> Neurons = new List<SimpleNeuron>();
+
+        public NeuronLayer(int neuronCount)
+        {
+            for (int i = 0; i < neuronCount; i++)
+                Neurons.Add(new SimpleNeuron());
+        }
+
+        // Forward pass for the whole layer
+        public double[] Forward(double input)
+        {
+            double[] outputs = new double[Neurons.Count];
+
+            for (int i = 0; i < Neurons.Count; i++)
+                outputs[i] = Neurons[i].Forward(input);
+
+            return outputs;
+        }
+
+        // Train each neuron independently
+        public void Train(double input, double[] targets)
+        {
+            for (int i = 0; i < Neurons.Count; i++)
+                Neurons[i].Train(input, targets[i]);
+        }
+    }
+}
+
+
+namespace NeuronDemo
+{
 
     public class SimpleNeuron
     {
@@ -65,5 +98,155 @@ namespace NeuronDemo
             Weight -= LearningRate * delta * input;
             Bias -= LearningRate * delta;
         }
+    }
+}
+
+namespace NeuronDemo
+{
+
+    public class TrainingLoop
+    {
+        private Form1 _mainForm;
+
+        public TrainingLoop(Form1 form)
+        {
+            _mainForm = form;
+        }
+        public void Run()
+        {
+            var layer = new NeuronLayer(2);
+
+            double input = 2.0;
+            double[] targets = { 0.0, 1.0 };
+
+            var tb = _mainForm.textBox1;
+
+            for (int i = 0; i < 100000; i++)
+            {
+                var outputs = layer.Forward(input);
+
+                // Print occasionally
+                if (i % 10000 == 0)
+                {
+                    tb.AppendText($"{i} | Out1={outputs[0]:F5} | Out2={outputs[1]:F5}" + Environment.NewLine);
+                }
+
+                layer.Train(input, targets);
+            }
+
+
+            //    SimpleNeuron neuron = new SimpleNeuron();
+            //    double input = 2.0;
+            //    double target = 0.0;
+
+            //    var tb = _mainForm.textBox1;
+
+            //    tb.AppendText("Iteration  |  Input    |  Target  | Output |    Error" + Environment.NewLine);
+            //    //tb.Text = tb.Text + ("--------------------------" + Environment.NewLine);
+
+            //    for (int i = 0; i <= 100000000; i++)
+            //    {
+            //        double output = neuron.Forward(input);
+            //        double error = Math.Pow(output - target, 2); // Mean Squared Error
+
+            //        if (i % 10000000 == 0) // Print every 10th iteration
+            //        {
+            //            tb.AppendText($"{i.ToString("00000000")} | {input:F5} | {target:F5} | {output:F5} | {error:F9}" + Environment.NewLine);
+            //        }
+
+            //        neuron.Train(input, target);
+            //    }
+        }
+    }
+}
+
+namespace NeuronDemo
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            button1 = new Button();
+            textBox1 = new TextBox();
+            button2 = new Button();
+            SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.Location = new Point(0, 0);
+            button1.Margin = new Padding(4, 5, 4, 5);
+            button1.Name = "button1";
+            button1.Size = new Size(413, 38);
+            button1.TabIndex = 0;
+            button1.Text = "Run";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // textBox1
+            // 
+            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox1.Location = new Point(0, 48);
+            textBox1.Margin = new Padding(4, 5, 4, 5);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.ScrollBars = ScrollBars.Vertical;
+            textBox1.Size = new Size(646, 692);
+            textBox1.TabIndex = 1;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(421, 0);
+            button2.Margin = new Padding(4, 5, 4, 5);
+            button2.Name = "button2";
+            button2.Size = new Size(413, 38);
+            button2.TabIndex = 2;
+            button2.Text = "Clear";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1613, 748);
+            Controls.Add(button2);
+            Controls.Add(textBox1);
+            Controls.Add(button1);
+            Margin = new Padding(4, 5, 4, 5);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private Button button1;
+        public TextBox textBox1;
+        private Button button2;
     }
 }
