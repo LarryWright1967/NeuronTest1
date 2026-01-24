@@ -3,38 +3,40 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace NeuronDemo;
-
-public class TrainingLoop
+namespace NeuronDemo
 {
-    private Form1 _mainForm;
 
-    public TrainingLoop(Form1 form)
+    public class TrainingLoop
     {
-        _mainForm = form;
-    }
-    public void Run()
-    {
-        SimpleNeuron neuron = new SimpleNeuron();
-        double input = 2.0;
-        double target = 0.0;
+        private Form1 _mainForm;
 
-        var tb = _mainForm.textBox1;
-
-        tb.Text = tb.Text + ("Iteration  |  Input    |  Target  | Output |    Error" + Environment.NewLine);
-        //tb.Text = tb.Text + ("--------------------------" + Environment.NewLine);
-
-        for (int i = 0; i <= 10000000; i++)
+        public TrainingLoop(Form1 form)
         {
-            double output = neuron.Forward(input);
-            double error = Math.Pow(output - target, 2); // Mean Squared Error
+            _mainForm = form;
+        }
+        public void Run()
+        {
+            SimpleNeuron neuron = new SimpleNeuron();
+            double input = 2.0;
+            double target = 0.0;
 
-            if (i % 50000 == 0) // Print every 10th iteration
+            var tb = _mainForm.textBox1;
+
+            tb.AppendText("Iteration  |  Input    |  Target  | Output |    Error" + Environment.NewLine);
+            //tb.Text = tb.Text + ("--------------------------" + Environment.NewLine);
+
+            for (int i = 0; i <= 100000000; i++)
             {
-                tb.Text = tb.Text + ($"{i.ToString("00000000")} | {input:F5} | {target:F5} | {output:F5} | {error:F9}" + Environment.NewLine);
-            }
+                double output = neuron.Forward(input);
+                double error = Math.Pow(output - target, 2); // Mean Squared Error
 
-            neuron.Train(input, target);
+                if (i % 10000000 == 0) // Print every 10th iteration
+                {
+                    tb.AppendText($"{i.ToString("00000000")} | {input:F5} | {target:F5} | {output:F5} | {error:F9}" + Environment.NewLine);
+                }
+
+                neuron.Train(input, target);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace NeuronDemo
+﻿
+
+namespace NeuronDemo
 {
     partial class Form1
     {
