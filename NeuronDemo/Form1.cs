@@ -106,6 +106,15 @@ namespace NeuronDemo
 
     public class TrainingLoop
     {
+        private ScottPlot.Coordinates[] ToPoints(double[] xs, double[] ys)
+        {
+            var pts = new ScottPlot.Coordinates[xs.Length];
+            for (int i = 0; i < xs.Length; i++)
+                pts[i] = new ScottPlot.Coordinates(xs[i], ys[i]);
+            return pts;
+        }
+
+
         private Form1 _mainForm;
 
         public TrainingLoop(Form1 form)
@@ -121,9 +130,17 @@ namespace NeuronDemo
 
             var tb = _mainForm.textBox1;
 
+            List<double> out1History = new List<double>();
+            List<double> out2History = new List<double>();
+            List<double> iterationHistory = new List<double>();
+
             for (int i = 0; i < 100000; i++)
             {
                 var outputs = layer.Forward(input);
+
+                out1History.Add(outputs[0]);
+                out2History.Add(outputs[1]);
+                iterationHistory.Add(i);
 
                 // Print occasionally
                 if (i % 10000 == 0)
@@ -134,28 +151,26 @@ namespace NeuronDemo
                 layer.Train(input, targets);
             }
 
+            tb.AppendText($"Point Count = {iterationHistory.Count}" + Environment.NewLine);
 
-            //    SimpleNeuron neuron = new SimpleNeuron();
-            //    double input = 2.0;
-            //    double target = 0.0;
+            var plt = _mainForm.formsPlot1.Plot;
 
-            //    var tb = _mainForm.textBox1;
+            plt.Clear();
 
-            //    tb.AppendText("Iteration  |  Input    |  Target  | Output |    Error" + Environment.NewLine);
-            //    //tb.Text = tb.Text + ("--------------------------" + Environment.NewLine);
+            var points1 = ToPoints(iterationHistory.ToArray(), out1History.ToArray());
+            var points2 = ToPoints(iterationHistory.ToArray(), out2History.ToArray());
 
-            //    for (int i = 0; i <= 100000000; i++)
-            //    {
-            //        double output = neuron.Forward(input);
-            //        double error = Math.Pow(output - target, 2); // Mean Squared Error
+            plt.Add.Scatter(points1, ScottPlot.Color.FromSDColor(Color.Brown));
+            plt.Add.Scatter(points2, ScottPlot.Color.FromSDColor(Color.DarkCyan));
 
-            //        if (i % 10000000 == 0) // Print every 10th iteration
-            //        {
-            //            tb.AppendText($"{i.ToString("00000000")} | {input:F5} | {target:F5} | {output:F5} | {error:F9}" + Environment.NewLine);
-            //        }
+            plt.Legend.IsVisible = true;
+            plt.Title("Neuron Outputs Over Training");
+            plt.XLabel("Iteration");
+            plt.YLabel("Output Value");
+            plt.Axes.AutoScale();
 
-            //        neuron.Train(input, target);
-            //    }
+            _mainForm.formsPlot1.Refresh();
+
         }
     }
 }
@@ -193,6 +208,7 @@ namespace NeuronDemo
             button1 = new Button();
             textBox1 = new TextBox();
             button2 = new Button();
+            formsPlot1 = new ScottPlot.WinForms.FormsPlot();
             SuspendLayout();
             // 
             // button1
@@ -208,7 +224,7 @@ namespace NeuronDemo
             // 
             // textBox1
             // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             textBox1.Location = new Point(0, 48);
             textBox1.Margin = new Padding(4, 5, 4, 5);
             textBox1.Multiline = true;
@@ -228,11 +244,21 @@ namespace NeuronDemo
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // formsPlot1
+            // 
+            formsPlot1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            formsPlot1.DisplayScale = 1.5F;
+            formsPlot1.Location = new Point(653, 48);
+            formsPlot1.Name = "formsPlot1";
+            formsPlot1.Size = new Size(958, 702);
+            formsPlot1.TabIndex = 3;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1613, 748);
+            Controls.Add(formsPlot1);
             Controls.Add(button2);
             Controls.Add(textBox1);
             Controls.Add(button1);
@@ -248,5 +274,6 @@ namespace NeuronDemo
         private Button button1;
         public TextBox textBox1;
         private Button button2;
+        public ScottPlot.WinForms.FormsPlot formsPlot1;
     }
 }
