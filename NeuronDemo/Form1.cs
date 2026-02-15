@@ -8,12 +8,106 @@ using System.Text;
 namespace NeuronDemo
 {
 
-    public partial class Form1 : Form
+    //public partial class Form1 : Form
+    public class Form1 : Form
     {
+
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        private Button button1;
+        public TextBox textBox1;
+        private Button button2;
+        public ScottPlot.WinForms.FormsPlot formsPlot1;
+
         public Form1()
         {
             InitializeComponent();
+        }
 
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            button1 = new Button();
+            textBox1 = new TextBox();
+            button2 = new Button();
+            formsPlot1 = new ScottPlot.WinForms.FormsPlot();
+            SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.Location = new Point(0, 0);
+            button1.Margin = new Padding(4, 5, 4, 5);
+            button1.Name = "button1";
+            button1.Size = new Size(413, 38);
+            button1.TabIndex = 0;
+            button1.Text = "Run";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // textBox1
+            // 
+            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            textBox1.Location = new Point(0, 48);
+            textBox1.Margin = new Padding(4, 5, 4, 5);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.ScrollBars = ScrollBars.Vertical;
+            textBox1.Size = new Size(646, 971);
+            textBox1.TabIndex = 1;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(421, 0);
+            button2.Margin = new Padding(4, 5, 4, 5);
+            button2.Name = "button2";
+            button2.Size = new Size(413, 38);
+            button2.TabIndex = 2;
+            button2.Text = "Clear";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // formsPlot1
+            // 
+            formsPlot1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            formsPlot1.DisplayScale = 1.5F;
+            formsPlot1.Location = new Point(836, 48);
+            formsPlot1.Name = "formsPlot1";
+            formsPlot1.Size = new Size(958, 981);
+            formsPlot1.TabIndex = 3;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1796, 1027);
+            Controls.Add(formsPlot1);
+            Controls.Add(button2);
+            Controls.Add(textBox1);
+            Controls.Add(button1);
+            Margin = new Padding(4, 5, 4, 5);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -22,15 +116,14 @@ namespace NeuronDemo
             trainingLoop.Run();
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
             textBox1.Clear();
         }
-    }
-}
 
-namespace NeuronDemo
-{
+    }
+
     public class NeuronLayer
     {
         public List<SimpleNeuron> Neurons = new List<SimpleNeuron>();
@@ -59,11 +152,6 @@ namespace NeuronDemo
                 Neurons[i].Train(input, targets[i]);
         }
     }
-}
-
-
-namespace NeuronDemo
-{
 
     public class SimpleNeuron
     {
@@ -99,10 +187,6 @@ namespace NeuronDemo
             Bias -= LearningRate * delta;
         }
     }
-}
-
-namespace NeuronDemo
-{
 
     public class TrainingLoop
     {
@@ -175,105 +259,3 @@ namespace NeuronDemo
     }
 }
 
-namespace NeuronDemo
-{
-    partial class Form1
-    {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            button1 = new Button();
-            textBox1 = new TextBox();
-            button2 = new Button();
-            formsPlot1 = new ScottPlot.WinForms.FormsPlot();
-            SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.Location = new Point(0, 0);
-            button1.Margin = new Padding(4, 5, 4, 5);
-            button1.Name = "button1";
-            button1.Size = new Size(413, 38);
-            button1.TabIndex = 0;
-            button1.Text = "Run";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
-            // textBox1
-            // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            textBox1.Location = new Point(0, 48);
-            textBox1.Margin = new Padding(4, 5, 4, 5);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.ScrollBars = ScrollBars.Vertical;
-            textBox1.Size = new Size(646, 692);
-            textBox1.TabIndex = 1;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(421, 0);
-            button2.Margin = new Padding(4, 5, 4, 5);
-            button2.Name = "button2";
-            button2.Size = new Size(413, 38);
-            button2.TabIndex = 2;
-            button2.Text = "Clear";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
-            // formsPlot1
-            // 
-            formsPlot1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            formsPlot1.DisplayScale = 1.5F;
-            formsPlot1.Location = new Point(653, 48);
-            formsPlot1.Name = "formsPlot1";
-            formsPlot1.Size = new Size(958, 702);
-            formsPlot1.TabIndex = 3;
-            // 
-            // Form1
-            // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1613, 748);
-            Controls.Add(formsPlot1);
-            Controls.Add(button2);
-            Controls.Add(textBox1);
-            Controls.Add(button1);
-            Margin = new Padding(4, 5, 4, 5);
-            Name = "Form1";
-            Text = "Form1";
-            ResumeLayout(false);
-            PerformLayout();
-        }
-
-        #endregion
-
-        private Button button1;
-        public TextBox textBox1;
-        private Button button2;
-        public ScottPlot.WinForms.FormsPlot formsPlot1;
-    }
-}
